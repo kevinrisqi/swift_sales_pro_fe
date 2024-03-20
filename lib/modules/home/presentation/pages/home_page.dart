@@ -45,7 +45,21 @@ class _HomePageState extends State<HomePage> {
           height: 65,
           child: FloatingActionButton(
               onPressed: () {
-                context.push(const CartPage());
+                Navigator.push(context, PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return const CartPage();
+                  },
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    const begin = Offset(1.0, 0.0);
+                    const end = Offset.zero;
+                    const curve = Curves.easeInOut;
+                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                ));
               },
               backgroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(

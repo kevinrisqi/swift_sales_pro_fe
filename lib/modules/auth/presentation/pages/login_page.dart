@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:swift_sales_pro_fe/core/components/buttons.dart';
 import 'package:swift_sales_pro_fe/core/components/custom_text_field.dart';
@@ -22,24 +23,24 @@ class LoginPage extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.3,
+            height: 1.sh * 0.27,
             child: Stack(
               children: [
                 Positioned(
-                  top: -220,
-                  left: -60,
+                  top: -175.h,
+                  left: -60.w,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width + 120,
-                    height: MediaQuery.of(context).size.height * 0.5,
+                    width: 1.sw + 120.w,
+                    height: 1.sh * 0.5,
                     child: CircleAvatar(
                       backgroundColor: AppColors.primary.withOpacity(0.3),
                     ),
                   ),
                 ),
-                const Positioned(
-                  top: 50,
-                  left: 20,
-                  child: Column(
+                Positioned(
+                  top: 40.h,
+                  left: 20.w,
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -62,43 +63,43 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: -240,
-                  right: -330,
+                  top: -175.h,
+                  right: -330.w,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width + 120,
-                    height: MediaQuery.of(context).size.height * 0.5,
+                    width: 1.sw + 120.w,
+                    height: 1.sh * 0.5,
                     child: CircleAvatar(
                       backgroundColor: AppColors.primary.withOpacity(0.3),
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 240,
-                  left: 20,
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width - 40,
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: const TextSpan(
-                        text: 'Swift Sales ',
-                        children: [
-                          TextSpan(
-                            text: 'Pro',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                // Positioned(
+                //   top: 240,
+                //   left: 20,
+                //   child: SizedBox(
+                //     width: MediaQuery.of(context).size.width - 40,
+                //     child: RichText(
+                //       textAlign: TextAlign.center,
+                //       text: const TextSpan(
+                //         text: 'Swift Sales ',
+                //         children: [
+                //           TextSpan(
+                //             text: 'Pro',
+                //             style: TextStyle(
+                //               color: AppColors.primary,
+                //               fontWeight: FontWeight.bold,
+                //             ),
+                //           ),
+                //         ],
+                //         style: TextStyle(
+                //           fontSize: 24,
+                //           fontWeight: FontWeight.bold,
+                //           color: AppColors.black,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -106,6 +107,27 @@ class LoginPage extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: const TextSpan(
+                    text: 'Swift Sales ',
+                    children: [
+                      TextSpan(
+                        text: 'Pro',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.black,
+                    ),
+                  ),
+                ),
+                const SpaceHeight(20),
                 CustomTextField(
                   controller: TextEditingController(),
                   title: 'Email',

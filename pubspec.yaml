@@ -33,12 +33,15 @@ dependencies:
   dio: ^5.4.1
   flutter:
     sdk: flutter
+  flutter_screenutil: ^5.9.0
   flutter_svg: ^2.0.9
   font_awesome_flutter: ^10.7.0
   google_fonts: ^5.1.0
   image_picker: ^1.0.4
   intl: ^0.19.0
   loading_animation_widget: ^1.2.0+4
+  lottie: ^2.7.0
+  package_info_plus: ^4.2.0
   url_launcher: ^6.2.4
 
 dev_dependencies:
@@ -66,6 +69,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/lottie/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

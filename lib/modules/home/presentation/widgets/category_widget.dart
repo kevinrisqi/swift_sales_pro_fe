@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:swift_sales_pro_fe/core/assets/assets.gen.dart';
@@ -66,15 +67,16 @@ class _CategoryWidgetState extends State<CategoryWidget> {
               color: widget.isSelected
                   ? (widget.assetColor ?? Colors.white)
                   : AppColors.primary,
-              width: widget.assetWidth ?? 35,
-              height: widget.assetHeight ?? 35,
+              width: widget.assetWidth ?? 35.w,
+              height: widget.assetHeight ?? 35.w,
+              fit: BoxFit.cover,
             ),
-            const SpaceHeight(10),
+            const SpaceHeight(2),
             Text(
               widget.label,
               style: widget.labelStyle ??
                   TextStyle(
-                    fontSize: 16,
+                    fontSize: 14.sp,
                     fontWeight: FontWeight.w600,
                     color:
                         widget.isSelected ? AppColors.white : AppColors.primary,

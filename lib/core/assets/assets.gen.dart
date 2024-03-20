@@ -143,11 +143,22 @@ class $AssetsImagesGen {
       ];
 }
 
+class $AssetsLottieGen {
+  const $AssetsLottieGen();
+
+  /// File path: assets/lottie/anim_coming_soon.json
+  String get animComingSoon => 'assets/lottie/anim_coming_soon.json';
+
+  /// List of all assets
+  List<String> get values => [animComingSoon];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsLottieGen lottie = $AssetsLottieGen();
 }
 
 class AssetGenImage {

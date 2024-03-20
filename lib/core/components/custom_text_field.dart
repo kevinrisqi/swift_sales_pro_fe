@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:swift_sales_pro_fe/core/constants/colors.dart';
 
 import 'spaces.dart';
@@ -80,6 +81,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           const SpaceHeight(12.0),
         ],
         Container(
+        height: 45.h,
           decoration: widget.useShadow
               ? BoxDecoration(
                   boxShadow: [
@@ -136,7 +138,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               hintText: widget.hint,
               hintStyle: widget.hintStyle ??
                   const TextStyle(
-                      fontSize: 15,
+                      fontSize: 14,
                       fontWeight: FontWeight.w400,
                       color: Colors.grey),
             ),

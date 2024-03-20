@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:swift_sales_pro_fe/core/assets/assets.gen.dart';
 import 'package:swift_sales_pro_fe/core/components/custom_text_field.dart';
@@ -153,7 +154,7 @@ class _ProductPageState extends State<ProductPage> {
                 crossAxisCount: 2,
                 mainAxisSpacing: 20,
                 crossAxisSpacing: 20,
-                childAspectRatio: 0.7,
+                childAspectRatio: 0.6,
               ),
               itemCount: product.length,
               itemBuilder: (context, index) {
@@ -186,8 +187,8 @@ class _ProductPageState extends State<ProductPage> {
                         children: [
                           Text(
                             product[index].name,
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: TextStyle(
+                              fontSize: 15.sp,
                               fontWeight: FontWeight.w600,
                             ),
                             maxLines: 2,
@@ -195,8 +196,9 @@ class _ProductPageState extends State<ProductPage> {
                           ),
                           Text(
                             product[index].category,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.grey,
+                              fontSize: 14.sp,
                             ),
                           ),
                           const SpaceHeight(10),
@@ -209,23 +211,23 @@ class _ProductPageState extends State<ProductPage> {
                                         symbol: 'Rp ',
                                         decimalDigits: 0)
                                     .format(product[index].price),
-                                style: const TextStyle(
-                                  fontSize: 16,
+                                style: TextStyle(
+                                  fontSize: 15.sp,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                               InkWell(
                                 onTap: () {},
                                 child: Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding:  EdgeInsets.all(8.w),
                                   decoration: BoxDecoration(
                                     color: AppColors.primary,
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(12.r),
                                   ),
                                   child: const $AssetsIconsGen().orders.svg(
                                         color: AppColors.white,
-                                        width: 20,
-                                        height: 20,
+                                        width: 20.w,
+                                        height: 20.w,
                                       ),
                                 ),
                               ),

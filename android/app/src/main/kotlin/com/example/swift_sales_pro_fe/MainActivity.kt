@@ -1,4 +1,4 @@
-package com.example.swift_sales_pro_fe
+package com.zenai.swift_sales_pro
 
 import io.flutter.embedding.android.FlutterActivity
 
