@@ -29,7 +29,7 @@ class PaymentMethodWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           color: isActive ? AppColors.primary : AppColors.white,
           boxShadow: !isActive ? [
-            BoxShadow(
+            BoxShadow( 
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 1,
               blurRadius: 5,
