@@ -28,34 +28,39 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: const Size(360, 690),
-        minTextAdapt: true,
-        splitScreenMode: true,
-        builder: (_, child) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
-              useMaterial3: true,
-              textTheme: GoogleFonts.outfitTextTheme(
-                Theme.of(context).textTheme,
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (_, child) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primary),
+            useMaterial3: true,
+            textTheme: GoogleFonts.outfitTextTheme(
+              Theme.of(context).textTheme,
+            ),
+            appBarTheme: AppBarTheme(
+              color: AppColors.white,
+              elevation: 0,
+              titleTextStyle: GoogleFonts.outfit(
+                color: AppColors.primary,
+                fontSize: 16.0,
+                fontWeight: FontWeight.w500,
               ),
-              appBarTheme: AppBarTheme(
-                color: AppColors.white,
-                elevation: 0,
-                titleTextStyle: GoogleFonts.outfit(
-                  color: AppColors.primary,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.w500,
-                ),
-                iconTheme: const IconThemeData(
-                  color: AppColors.primary,
-                ),
+              iconTheme: const IconThemeData(
+                color: AppColors.primary,
               ),
             ),
-            home: const LoginPage(),
-          );
-        });
+          ),
+          home: Banner(
+            message: CoreEnvironmentFunction.getFlavorString(),
+            location: BannerLocation.topStart,
+            child: const LoginPage(),
+          ),
+        );
+      },
+    );
   }
 }

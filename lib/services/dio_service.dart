@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:swift_sales_pro_fe/core/constants/api_base_url.dart';
+import 'package:swift_sales_pro_fe/services/core_environment_function.dart';
 
 class DioService {
   DioService._();
@@ -38,7 +39,7 @@ class DioService {
     var dio = Dio(
       BaseOptions(
         headers: header,
-        baseUrl: customBaseURL ?? AppConstant.baseUrl,
+        baseUrl: customBaseURL ?? CoreEnvironmentFunction.getBaseUrl(),
         connectTimeout: connectTimeout,
       ),
     );

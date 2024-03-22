@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:swift_sales_pro_fe/core/components/buttons.dart';
@@ -10,171 +11,215 @@ import 'package:swift_sales_pro_fe/core/components/dialog_services.dart';
 import 'package:swift_sales_pro_fe/core/components/spaces.dart';
 import 'package:swift_sales_pro_fe/core/constants/colors.dart';
 import 'package:swift_sales_pro_fe/core/extensions/build_context_ext.dart';
+import 'package:swift_sales_pro_fe/modules/auth/data/datasource/auth_remote_datasource.dart';
+import 'package:swift_sales_pro_fe/modules/auth/presentation/bloc/login/login_cubit.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  var emailC = TextEditingController();
+  var passwordC = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          SizedBox(
-            height: 1.sh * 0.27,
-            child: Stack(
-              children: [
-                Positioned(
-                  top: -175.h,
-                  left: -60.w,
-                  child: SizedBox(
-                    width: 1.sw + 120.w,
-                    height: 1.sh * 0.5,
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.primary.withOpacity(0.3),
+    return BlocProvider(
+      create: (context) => LoginCubit(),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: [
+            SizedBox(
+              height: 1.sh * 0.27,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: -175.h,
+                    left: -60.w,
+                    child: SizedBox(
+                      width: 1.sw + 120.w,
+                      height: 1.sh * 0.5,
+                      child: CircleAvatar(
+                        backgroundColor: AppColors.primary.withOpacity(0.3),
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  top: 40.h,
-                  left: 20.w,
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Welcome Back!',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
+                  Positioned(
+                    top: 40.h,
+                    left: 20.w,
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Welcome Back!',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.black,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'To keep connected with us please login\nwith your personal info',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.black,
+                        Text(
+                          'To keep connected with us please login\nwith your personal info',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.black,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  top: -175.h,
-                  right: -330.w,
-                  child: SizedBox(
-                    width: 1.sw + 120.w,
-                    height: 1.sh * 0.5,
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.primary.withOpacity(0.3),
+                      ],
                     ),
                   ),
-                ),
-                // Positioned(
-                //   top: 240,
-                //   left: 20,
-                //   child: SizedBox(
-                //     width: MediaQuery.of(context).size.width - 40,
-                //     child: RichText(
-                //       textAlign: TextAlign.center,
-                //       text: const TextSpan(
-                //         text: 'Swift Sales ',
-                //         children: [
-                //           TextSpan(
-                //             text: 'Pro',
-                //             style: TextStyle(
-                //               color: AppColors.primary,
-                //               fontWeight: FontWeight.bold,
-                //             ),
-                //           ),
-                //         ],
-                //         style: TextStyle(
-                //           fontSize: 24,
-                //           fontWeight: FontWeight.bold,
-                //           color: AppColors.black,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
+                  Positioned(
+                    top: -175.h,
+                    right: -330.w,
+                    child: SizedBox(
+                      width: 1.sw + 120.w,
+                      height: 1.sh * 0.5,
+                      child: CircleAvatar(
+                        backgroundColor: AppColors.primary.withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                  // Positioned(
+                  //   top: 240,
+                  //   left: 20,
+                  //   child: SizedBox(
+                  //     width: MediaQuery.of(context).size.width - 40,
+                  //     child: RichText(
+                  //       textAlign: TextAlign.center,
+                  //       text: const TextSpan(
+                  //         text: 'Swift Sales ',
+                  //         children: [
+                  //           TextSpan(
+                  //             text: 'Pro',
+                  //             style: TextStyle(
+                  //               color: AppColors.primary,
+                  //               fontWeight: FontWeight.bold,
+                  //             ),
+                  //           ),
+                  //         ],
+                  //         style: TextStyle(
+                  //           fontSize: 24,
+                  //           fontWeight: FontWeight.bold,
+                  //           color: AppColors.black,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                RichText(
-                  textAlign: TextAlign.center,
-                  text: const TextSpan(
-                    text: 'Swift Sales ',
-                    children: [
-                      TextSpan(
-                        text: 'Pro',
-                        style: TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: const TextSpan(
+                      text: 'Swift Sales ',
+                      children: [
+                        TextSpan(
+                          text: 'Pro',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
+                      ],
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.black,
                       ),
-                    ],
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black,
                     ),
                   ),
-                ),
-                const SpaceHeight(20),
-                CustomTextField(
-                  controller: TextEditingController(),
-                  title: 'Email',
-                  hint: 'Input Your Email',
-                ),
-                const SpaceHeight(16),
-                CustomTextField.password(
-                  controller: TextEditingController(),
-                  title: 'Password',
-                  hint: 'Input Your Password',
-                ),
-                const SpaceHeight(30),
-                MainButton.filled(
-                    onPressed: () {
-                      context.push(const HomePage());
+                  const SpaceHeight(20),
+                  CustomTextField(
+                    controller: emailC,
+                    title: 'Email',
+                    hint: 'Input Your Email',
+                  ),
+                  const SpaceHeight(16),
+                  CustomTextField.password(
+                    controller: passwordC,
+                    title: 'Password',
+                    hint: 'Input Your Password',
+                  ),
+                  const SpaceHeight(30),
+                  BlocConsumer<LoginCubit, LoginState>(
+                    listener: (context, state) {
+                      state.maybeWhen(
+                        orElse: () {},
+                        loading: () {
+                          return const CircularProgressIndicator();
+                        },
+                        success: (authResponseModel) {
+                          log('authResponseModel: $authResponseModel');
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomePage(),
+                            ),
+                          );
+                        },
+                        error: (message) {
+                          log('Error Login: $message');
+                          DialogService.showGeneralSnackbar(
+                            context: context,
+                            message: message,
+                            isError: true,
+                          );
+                        },
+                      );
                     },
-                    label: 'Login'),
-                const SpaceHeight(30),
-                RichText(
-                  text: TextSpan(
-                    text:
-                        'If you have problem with your account, please contact our support.',
-                    style: const TextStyle(
-                      color: AppColors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'Contact Support',
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            _contactUs(context);
-                          },
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    ],
+                    builder: (context, state) {
+                      return MainButton.filled(
+                        onPressed: () {
+                          context.read<LoginCubit>().login(
+                              email: emailC.text, password: passwordC.text);
+                        },
+                        label: 'Login',
+                      );
+                    },
                   ),
-                ),
-              ],
+                  const SpaceHeight(30),
+                  RichText(
+                    text: TextSpan(
+                      text:
+                          'If you have problem with your account, please contact our support.',
+                      style: const TextStyle(
+                        color: AppColors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      children: [
+                        TextSpan(
+                          text: 'Contact Support',
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              _contactUs(context);
+                            },
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
