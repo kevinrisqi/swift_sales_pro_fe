@@ -144,4 +144,25 @@ class DialogService {
       },
     );
   }
+
+  static void showGeneralSnackbar({
+    required BuildContext context,
+    required String message,
+    bool isError = false,
+  }) {
+    /// * if snackbar is already showing, close it first
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(
+            color: AppColors.white,
+          ),
+        ),
+        backgroundColor: isError ? AppColors.red : AppColors.green,
+      ),
+    );
+  }
 }
