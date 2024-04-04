@@ -165,4 +165,30 @@ class DialogService {
       ),
     );
   }
+
+  static void showLoadingDialog({
+    required BuildContext context,
+  }) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: FittedBox(
+            child: Column(
+              children: [
+                Lottie.asset(
+                  const $AssetsLottieGen().animLoading,
+                  width: 100,
+                ),
+                const SpaceHeight(20),
+                const Text('Loading...'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 }

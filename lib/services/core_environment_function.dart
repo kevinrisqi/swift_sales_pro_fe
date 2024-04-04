@@ -6,7 +6,7 @@ class CoreEnvironmentFunction {
   static String getBaseUrl() {
     switch (currentFlavor) {
       case Flavor.development:
-        return 'https://e357-103-125-36-80.ngrok-free.app';
+        return 'https://32b3-2a09-bac5-3a54-15f-00-23-3c7.ngrok-free.app';
       case Flavor.staging:
         return 'https://stag.example.com';
       case Flavor.production:

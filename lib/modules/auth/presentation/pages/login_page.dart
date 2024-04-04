@@ -12,7 +12,7 @@ import 'package:swift_sales_pro_fe/core/components/spaces.dart';
 import 'package:swift_sales_pro_fe/core/constants/colors.dart';
 import 'package:swift_sales_pro_fe/core/extensions/build_context_ext.dart';
 import 'package:swift_sales_pro_fe/modules/auth/data/datasource/auth_remote_datasource.dart';
-import 'package:swift_sales_pro_fe/modules/auth/presentation/bloc/login/login_cubit.dart';
+import 'package:swift_sales_pro_fe/modules/auth/presentation/bloc/login/login_bloc.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginCubit(),
+      create: (context) => LoginBloc(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Column(
@@ -86,33 +86,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  // Positioned(
-                  //   top: 240,
-                  //   left: 20,
-                  //   child: SizedBox(
-                  //     width: MediaQuery.of(context).size.width - 40,
-                  //     child: RichText(
-                  //       textAlign: TextAlign.center,
-                  //       text: const TextSpan(
-                  //         text: 'Swift Sales ',
-                  //         children: [
-                  //           TextSpan(
-                  //             text: 'Pro',
-                  //             style: TextStyle(
-                  //               color: AppColors.primary,
-                  //               fontWeight: FontWeight.bold,
-                  //             ),
-                  //           ),
-                  //         ],
-                  //         style: TextStyle(
-                  //           fontSize: 24,
-                  //           fontWeight: FontWeight.bold,
-                  //           color: AppColors.black,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -153,12 +126,21 @@ class _LoginPageState extends State<LoginPage> {
                     hint: 'Input Your Password',
                   ),
                   const SpaceHeight(30),
-                  BlocConsumer<LoginCubit, LoginState>(
+                  BlocConsumer<LoginBloc, LoginState>(
                     listener: (context, state) {
                       state.maybeWhen(
                         orElse: () {},
                         loading: () {
-                          return const CircularProgressIndicator();
+                          log('loading..');
+                          return showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
                         },
                         success: (authResponseModel) {
                           log('authResponseModel: $authResponseModel');
@@ -171,6 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         error: (message) {
                           log('Error Login: $message');
+                          context.pop();
                           DialogService.showGeneralSnackbar(
                             context: context,
                             message: message,
@@ -182,8 +165,12 @@ class _LoginPageState extends State<LoginPage> {
                     builder: (context, state) {
                       return MainButton.filled(
                         onPressed: () {
-                          context.read<LoginCubit>().login(
-                              email: emailC.text, password: passwordC.text);
+                          context.read<LoginBloc>().add(
+                                LoginEvent.login(
+                                  email: emailC.text,
+                                  password: passwordC.text,
+                                ),
+                              );
                         },
                         label: 'Login',
                       );
