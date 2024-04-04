@@ -178,10 +178,10 @@ class DialogService {
           child: FittedBox(
             child: Column(
               children: [
-                Lottie.asset(
-                  const $AssetsLottieGen().animLoading,
-                  width: 100,
-                ),
+                // Lottie.asset(
+                //   const $AssetsLottieGen().animLoading,
+                //   width: 100,
+                // ),
                 const SpaceHeight(20),
                 const Text('Loading...'),
               ],
