@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swift_sales_pro_fe/core/assets/assets.gen.dart';
 import 'package:swift_sales_pro_fe/core/components/spaces.dart';
 import 'package:swift_sales_pro_fe/core/constants/colors.dart';
 import 'package:swift_sales_pro_fe/core/extensions/build_context_ext.dart';
-import 'package:swift_sales_pro_fe/modules/home/presentation/pages/cart_page.dart';
+import 'package:swift_sales_pro_fe/modules/cart/presentation/pages/cart_page.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/history_page.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/order_page.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/payment_page.dart';
@@ -35,31 +36,41 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Katalog'),
         leading: const SizedBox(),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.search),
+          ),
+        ],
         centerTitle: true,
         forceMaterialTransparency: true,
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(top: 20),
         child: SizedBox(
-          width: 65,
-          height: 65,
+          width: 65.w,
+          height: 65.w,
           child: FloatingActionButton(
               onPressed: () {
-                Navigator.push(context, PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    return const CartPage();
-                  },
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(1.0, 0.0);
-                    const end = Offset.zero;
-                    const curve = Curves.easeInOut;
-                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
-                ));
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const CartPage();
+                      },
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        return SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        );
+                      },
+                    ));
               },
               backgroundColor: AppColors.primary,
               shape: RoundedRectangleBorder(

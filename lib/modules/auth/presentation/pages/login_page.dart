@@ -11,6 +11,7 @@ import 'package:swift_sales_pro_fe/core/components/dialog_services.dart';
 import 'package:swift_sales_pro_fe/core/components/spaces.dart';
 import 'package:swift_sales_pro_fe/core/constants/colors.dart';
 import 'package:swift_sales_pro_fe/core/extensions/build_context_ext.dart';
+import 'package:swift_sales_pro_fe/modules/auth/data/datasource/auth_local_datasource.dart';
 import 'package:swift_sales_pro_fe/modules/auth/data/datasource/auth_remote_datasource.dart';
 import 'package:swift_sales_pro_fe/modules/auth/presentation/bloc/login/login_bloc.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/home_page.dart';
@@ -144,6 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         success: (authResponseModel) {
                           log('authResponseModel: $authResponseModel');
+                          AuthLocalDataSource.saveAuthData(authResponseModel);
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(

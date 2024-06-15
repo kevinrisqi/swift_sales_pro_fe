@@ -6,11 +6,11 @@ class CoreEnvironmentFunction {
   static String getBaseUrl() {
     switch (currentFlavor) {
       case Flavor.development:
-        return 'https://32b3-2a09-bac5-3a54-15f-00-23-3c7.ngrok-free.app';
+        return 'https://b08a-104-28-247-133.ngrok-free.app';
       case Flavor.staging:
-        return 'https://stag.example.com';
+        return 'https://zenai.swift-sales-pro.my.id';
       case Flavor.production:
-        return 'https://example.com';
+        return 'https://zenai.swift-sales-pro.my.id';
     }
   }
 
@@ -22,6 +22,17 @@ class CoreEnvironmentFunction {
         return 'Stag';
       case Flavor.production:
         return 'Prod';
+    }
+  }
+
+  static String getBaseImageUrl() {
+    switch (currentFlavor) {
+      case Flavor.development:
+        return 'https://zenai.swift-sales-pro.my.id/storage/products';
+      case Flavor.staging:
+        return 'https://zenai.swift-sales-pro.my.id/storage/products';
+      default:
+        return 'https://zenai.swift-sales-pro.my.id/storage/products';
     }
   }
 }

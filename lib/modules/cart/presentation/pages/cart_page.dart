@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -14,77 +15,21 @@ import 'package:swift_sales_pro_fe/core/components/dialog_services.dart';
 import 'package:swift_sales_pro_fe/core/components/spaces.dart';
 import 'package:swift_sales_pro_fe/core/constants/colors.dart';
 import 'package:swift_sales_pro_fe/core/extensions/build_context_ext.dart';
+import 'package:swift_sales_pro_fe/modules/cart/presentation/bloc/cart_bloc.dart';
+import 'package:swift_sales_pro_fe/modules/home/model/product_response_model.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/product_page.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/widgets/payment_method_widget.dart';
 
 class CartPage extends StatefulWidget {
-  const CartPage({super.key});
+  CartPage({super.key, required this.listCart});
+
+  List<CartModel> listCart = [];
 
   @override
   State<CartPage> createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
-  List<CartModel> cartProduct = [
-    CartModel(
-      product: ProductModel(
-        name: 'Espresso',
-        image: const $AssetsImagesGen().f3.path,
-        category: 'Minuman',
-        price: 20000,
-      ),
-      quantity: 1,
-    ),
-    CartModel(
-      product: ProductModel(
-        name: 'Mocha',
-        image: const $AssetsImagesGen().f4.path,
-        category: 'Minuman',
-        price: 35000,
-      ),
-      quantity: 2,
-    ),
-    CartModel(
-      product: ProductModel(
-        name: 'Caramel Macchiato',
-        image: const $AssetsImagesGen().f5.path,
-        category: 'Minuman',
-        price: 40000,
-      ),
-      quantity: 1,
-    ),
-    CartModel(
-      product: ProductModel(
-        name: 'Caramel Macchiato',
-        image: const $AssetsImagesGen().f5.path,
-        category: 'Minuman',
-        price: 40000,
-      ),
-      quantity: 1,
-    ),
-    CartModel(
-      product: ProductModel(
-        name: 'Caramel Macchiato',
-        image: const $AssetsImagesGen().f5.path,
-        category: 'Minuman',
-        price: 40000,
-      ),
-      quantity: 1,
-    ),
-    CartModel(
-      product: ProductModel(
-        name: 'Caramel Macchiato',
-        image: const $AssetsImagesGen().f5.path,
-        category: 'Minuman',
-        price: 40000,
-      ),
-      quantity: 1,
-    ),
-  ];
-
-  int get subTotal => cartProduct.fold(
-      0, (previousValue, element) => previousValue + element.total);
-
   var valueIndex = ValueNotifier(0);
 
   var paymentNominal = TextEditingController();
@@ -172,7 +117,7 @@ class _CartPageState extends State<CartPage> {
                                 locale: 'id_IDR',
                                 symbol: 'Rp ',
                                 decimalDigits: 0)
-                            .format(subTotal),
+                            .format(0),
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -208,12 +153,14 @@ class _CartPageState extends State<CartPage> {
         children: [
           Expanded(
             child: ListView.builder(
-              itemCount: cartProduct.length,
+              padding: EdgeInsets.only(bottom: 155.h),
+              itemCount: widget.listCart.length,
               itemBuilder: (context, index) {
-                var item = cartProduct[index];
+                var item = widget.listCart[index];
                 return Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.all(16),
+                  margin: EdgeInsets.fromLTRB(16.w, 16.w, 16.w,
+                      widget.listCart.length - 1 == index ? 16.w : 0),
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -230,7 +177,9 @@ class _CartPageState extends State<CartPage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(50),
                           image: DecorationImage(
-                              image: AssetImage(item.product.image)),
+                            image: CachedNetworkImageProvider(
+                                '${item.product.image}'),
+                          ),
                         ),
                       ),
                       const SpaceWidth(12),
@@ -239,14 +188,14 @@ class _CartPageState extends State<CartPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item.product.name,
+                              item.product.name ?? '',
                               style: TextStyle(
                                 fontSize: 15.sp,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             Text(
-                              item.product.category,
+                              item.product.category ?? '',
                               style: TextStyle(
                                   color: AppColors.grey, fontSize: 14.sp),
                             ),
@@ -273,9 +222,9 @@ class _CartPageState extends State<CartPage> {
                                   child: IconButton.filled(
                                     padding: EdgeInsets.zero,
                                     onPressed: () {
-                                      setState(() {
-                                        item.quantity--;
-                                      });
+                                      context.read<CartBloc>().add(
+                                          CartEvent.decrementProduct(
+                                              item.product));
                                     },
                                     icon: const Icon(Icons.remove),
                                   ),
@@ -350,11 +299,11 @@ class _CartPageState extends State<CartPage> {
               spacing: 10,
               runSpacing: 10,
               children: [
-                _nominalButton('Uang Pas'),
-                _nominalButton('Rp 10.000'),
-                _nominalButton('Rp 20.000'),
-                _nominalButton('Rp 50.000'),
-                _nominalButton('Rp 100.000'),
+                _nominalButton(0, nominal: 'Uang Pas'),
+                _nominalButton(1, nominal: 'Rp 10.000'),
+                _nominalButton(2, nominal: 'Rp 20.000'),
+                _nominalButton(3, nominal: 'Rp 50.000'),
+                _nominalButton(4, nominal: 'Rp 100.000'),
               ],
             ),
             const SpaceHeight(20),
@@ -409,8 +358,8 @@ class _CartPageState extends State<CartPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                      child:
-                          MainButton.filled(onPressed: () {}, label: 'Simpan')),
+                    child: MainButton.filled(onPressed: () {}, label: 'Simpan'),
+                  ),
                   const SpaceWidth(10),
                   Expanded(
                     child: MainButton.outlined(
@@ -434,24 +383,38 @@ class _CartPageState extends State<CartPage> {
     }
   }
 
-  Widget _nominalButton(String nominal) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColors.primary),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Text(
-          nominal,
-          style:  TextStyle(
-            color: AppColors.primary,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w600,
+  Widget _nominalButton(int index, {required String nominal}) {
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        final selectedNominal = context.read<CartBloc>().selectedIndexNominal;
+        return InkWell(
+          onTap: () {
+            context.read<CartBloc>().selectedIndexNominal = index;
+          },
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: selectedNominal == index
+                  ? AppColors.primary
+                  : AppColors.white,
+              border: Border.all(color: AppColors.primary),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              nominal,
+              style: TextStyle(
+                color: selectedNominal == index
+                    ? AppColors.white
+                    : AppColors.primary,
+                fontSize: 14.sp,
+                fontWeight: selectedNominal == index
+                    ? FontWeight.w600
+                    : FontWeight.w500,
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -461,12 +424,12 @@ class _CartPageState extends State<CartPage> {
       children: [
         Text(
           title,
-          style:  TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w400),
         ),
         const SpaceHeight(10),
         Text(
           subtitle,
-          style:  TextStyle(
+          style: TextStyle(
             fontSize: 15.sp,
             fontWeight: FontWeight.w600,
           ),
@@ -478,9 +441,9 @@ class _CartPageState extends State<CartPage> {
 }
 
 class CartModel {
-  ProductModel product;
+  Product product;
   int quantity;
-  int get total => product.price * quantity;
+  int get total => product.price! * quantity;
 
   CartModel({
     required this.product,

@@ -88,3 +88,10 @@ class _CategoryWidgetState extends State<CategoryWidget> {
     );
   }
 }
+
+enum CategoryType {
+  all,
+  food,
+  drink,
+  snack,
+}

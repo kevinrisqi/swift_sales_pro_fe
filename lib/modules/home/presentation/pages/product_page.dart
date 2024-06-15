@@ -1,11 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:swift_sales_pro_fe/core/assets/assets.gen.dart';
 import 'package:swift_sales_pro_fe/core/components/custom_text_field.dart';
 import 'package:swift_sales_pro_fe/core/components/spaces.dart';
 import 'package:swift_sales_pro_fe/core/constants/colors.dart';
+import 'package:swift_sales_pro_fe/modules/home/bloc/product_bloc.dart';
+import 'package:swift_sales_pro_fe/modules/home/model/product_response_model.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/widgets/category_widget.dart';
+import 'package:swift_sales_pro_fe/modules/home/presentation/widgets/product_card.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({super.key});
@@ -17,57 +23,6 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   final searchTextC = TextEditingController();
   int _selectedIndexCategory = 0;
-
-  List<ProductModel> product = [
-    ProductModel(
-      name: 'Vanilla Latte',
-      image: const $AssetsImagesGen().f1.path,
-      category: 'Minuman',
-      price: 25000,
-    ),
-    ProductModel(
-      name: 'Cappuccino',
-      image: const $AssetsImagesGen().f2.path,
-      category: 'Minuman',
-      price: 30000,
-    ),
-    ProductModel(
-      name: 'Espresso',
-      image: const $AssetsImagesGen().f3.path,
-      category: 'Minuman',
-      price: 20000,
-    ),
-    ProductModel(
-      name: 'Mocha',
-      image: const $AssetsImagesGen().f4.path,
-      category: 'Minuman',
-      price: 35000,
-    ),
-    ProductModel(
-      name: 'Caramel Macchiato',
-      image: const $AssetsImagesGen().f5.path,
-      category: 'Minuman',
-      price: 40000,
-    ),
-    ProductModel(
-      name: 'Iced Coffee',
-      image: const $AssetsImagesGen().f6.path,
-      category: 'Minuman',
-      price: 25000,
-    ),
-    ProductModel(
-      name: 'Iced Tea',
-      image: const $AssetsImagesGen().f7.path,
-      category: 'Minuman',
-      price: 15000,
-    ),
-    ProductModel(
-      name: 'Hot Tea',
-      image: const $AssetsImagesGen().f8.path,
-      category: 'Minuman',
-      price: 18000,
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +72,10 @@ class _ProductPageState extends State<ProductPage> {
                 label: 'Semua',
                 isSelected: _selectedIndexCategory == 0,
                 ontap: () {
-                  _onTapCategory(0);
+                  _onTapCategory(
+                    index: 0,
+                    category: CategoryType.all,
+                  );
                 },
               ),
               CategoryWidget(
@@ -125,7 +83,7 @@ class _ProductPageState extends State<ProductPage> {
                 label: 'Food',
                 isSelected: _selectedIndexCategory == 1,
                 ontap: () {
-                  _onTapCategory(1);
+                  _onTapCategory(index: 1, category: CategoryType.food);
                 },
               ),
               CategoryWidget(
@@ -133,7 +91,7 @@ class _ProductPageState extends State<ProductPage> {
                 label: 'Drink',
                 isSelected: _selectedIndexCategory == 2,
                 ontap: () {
-                  _onTapCategory(2);
+                  _onTapCategory(index: 2, category: CategoryType.drink);
                 },
               ),
               CategoryWidget(
@@ -141,102 +99,91 @@ class _ProductPageState extends State<ProductPage> {
                 label: 'Snack',
                 isSelected: _selectedIndexCategory == 3,
                 ontap: () {
-                  _onTapCategory(3);
+                  _onTapCategory(index: 3, category: CategoryType.snack);
                 },
               ),
             ],
           ),
           const SpaceHeight(25),
           Expanded(
-            child: GridView.builder(
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-                childAspectRatio: 0.6,
-              ),
-              itemCount: product.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: AppColors.grey.withOpacity(0.3),
-                      width: 1,
-                    ),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 92,
-                        height: 92,
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(50)),
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage(product[index].image),
+            child: BlocBuilder<ProductBloc, ProductState>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                  initial: () {
+                    context
+                        .read<ProductBloc>()
+                        .add(const ProductEvent.fetchProduct());
+                    return const SizedBox();
+                  },
+                  error: (error) {
+                    return Center(
+                      child: Text(
+                        error,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      const SpaceHeight(10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            product[index].name,
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            product[index].category,
-                            style: TextStyle(
-                              color: AppColors.grey,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                          const SpaceHeight(10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                NumberFormat.currency(
-                                        locale: 'id_IDR',
-                                        symbol: 'Rp ',
-                                        decimalDigits: 0)
-                                    .format(product[index].price),
-                                style: TextStyle(
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                    );
+                  },
+                  loading: () {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                  loaded: (List<Product> product) {
+                    if (product.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'No data found',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
                               ),
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  padding:  EdgeInsets.all(8.w),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.primary,
-                                    borderRadius: BorderRadius.circular(12.r),
-                                  ),
-                                  child: const $AssetsIconsGen().orders.svg(
-                                        color: AppColors.white,
-                                        width: 20.w,
-                                        height: 20.w,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            10.verticalSpace,
+                            ElevatedButton(
+                              onPressed: () {
+                                context
+                                    .read<ProductBloc>()
+                                    .add(const ProductEvent.fetchProduct());
+                              },
+                              child: const Text('Refresh'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return RefreshIndicator(
+                      onRefresh: () => Future.delayed(
+                        const Duration(seconds: 1),
+                        () => context
+                            .read<ProductBloc>()
+                            .add(const ProductEvent.fetchProduct()),
                       ),
-                    ],
-                  ),
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 20,
+                          childAspectRatio: 0.6,
+                        ),
+                        itemCount: product.length,
+                        itemBuilder: (context, index) {
+                          return ProductCard(product: product[index]);
+                        },
+                      ),
+                    );
+                  },
+                  orElse: () {
+                    return const SizedBox();
+                  },
                 );
               },
             ),
@@ -246,7 +193,10 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  void _onTapCategory(int index) {
+  void _onTapCategory({int index = 0, CategoryType? category}) {
+    context
+        .read<ProductBloc>()
+        .add(ProductEvent.filterProduct(category ?? CategoryType.all));
     setState(() {
       _selectedIndexCategory = index;
     });

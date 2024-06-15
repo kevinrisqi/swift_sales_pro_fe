@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:swift_sales_pro_fe/core/constants/api_base_url.dart';
+import 'package:swift_sales_pro_fe/modules/auth/data/datasource/auth_local_datasource.dart';
+import 'package:swift_sales_pro_fe/modules/auth/data/models/auth_response_model.dart';
 import 'package:swift_sales_pro_fe/services/core_environment_function.dart';
 
 class DioService {
@@ -15,16 +19,10 @@ class DioService {
     Map<String, dynamic> header = {};
 
     if (customAuthorizationToken == null || customAuthorizationToken.isEmpty) {
-      // var userData =
-      //     HiveService.get<UserData>(keyValue: HiveConstant.hiveKeyUserData);
 
-      // if (userData != null) {
-      //   /// * For testing purpose
-      //   /// * Expired token
-
-
-      //   token = userData.token ?? '';
-      // }
+      if (AuthLocalDataSource.token != null) {
+        token = AuthLocalDataSource.token ?? '';
+      }
     } else {
       token = customAuthorizationToken;
     }
