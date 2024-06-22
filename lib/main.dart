@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,11 +72,12 @@ class MyApp extends StatelessWidget {
             home: Banner(
               message: CoreEnvironmentFunction.getFlavorString(),
               location: BannerLocation.topStart,
-              child: FutureBuilder<bool>(
-                future: AuthLocalDataSource.isAuth(),
+              child: FutureBuilder<AuthResponseModel?>(
+                future: AuthLocalDataSource.getAuthData(),
                 builder: (context, snapshot) {
-                  if (snapshot.hasData && snapshot.data == true) {
-                    const HomePage();
+                  AuthLocalDataSource.token = snapshot.data?.data?.accessToken;
+                  if (snapshot.hasData) {
+                    return const HomePage();
                   }
                   return const LoginPage();
                 },

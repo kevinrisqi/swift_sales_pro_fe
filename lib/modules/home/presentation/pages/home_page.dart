@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:swift_sales_pro_fe/core/assets/assets.gen.dart';
 import 'package:swift_sales_pro_fe/core/components/spaces.dart';
 import 'package:swift_sales_pro_fe/core/constants/colors.dart';
 import 'package:swift_sales_pro_fe/core/extensions/build_context_ext.dart';
+import 'package:swift_sales_pro_fe/modules/cart/presentation/bloc/cart_bloc.dart';
 import 'package:swift_sales_pro_fe/modules/cart/presentation/pages/cart_page.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/history_page.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/order_page.dart';
@@ -56,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) {
-                        return const CartPage();
+                        return CartPage(listCart: context.read<CartBloc>().cartProduct);
                       },
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {

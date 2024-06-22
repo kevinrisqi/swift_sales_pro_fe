@@ -29,10 +29,10 @@ class AuthLocalDataSource {
     await pref.remove('auth_data');
   }
 
-  static Future<bool> isAuth() async {
-    final pref = await SharedPreferences.getInstance();
-    final authData = pref.getString('auth_data');
+  // static Future<bool> isAuth() async {
+  //   final pref = await SharedPreferences.getInstance();
+  //   final authData = pref.getString('auth_data');
 
-    return authData != null;
-  }
+  //   return authData != null;
+  // }
 }

@@ -19,6 +19,7 @@ import 'package:swift_sales_pro_fe/modules/cart/presentation/bloc/cart_bloc.dart
 import 'package:swift_sales_pro_fe/modules/home/model/product_response_model.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/pages/product_page.dart';
 import 'package:swift_sales_pro_fe/modules/home/presentation/widgets/payment_method_widget.dart';
+import 'package:swift_sales_pro_fe/services/core_environment_function.dart';
 
 class CartPage extends StatefulWidget {
   CartPage({super.key, required this.listCart});
@@ -149,121 +150,125 @@ class _CartPageState extends State<CartPage> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.only(bottom: 155.h),
-              itemCount: widget.listCart.length,
-              itemBuilder: (context, index) {
-                var item = widget.listCart[index];
-                return Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.fromLTRB(16.w, 16.w, 16.w,
-                      widget.listCart.length - 1 == index ? 16.w : 0),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AppColors.primary.withOpacity(.5),
-                      width: 1.5,
+      body: BlocProvider(
+        create: (context) => CartBloc(),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.only(bottom: 155.h),
+                itemCount: widget.listCart.length,
+                itemBuilder: (context, index) {
+                  var item = widget.listCart[index];
+                  var productImage =
+                      '${CoreEnvironmentFunction.getBaseImageUrl()}/${item.product.image!}';
+                  return Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.fromLTRB(16.w, 16.w, 16.w,
+                        widget.listCart.length - 1 == index ? 16.w : 0),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: AppColors.primary.withOpacity(.5),
+                        width: 1.5,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 76,
-                        height: 76,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          image: DecorationImage(
-                            image: CachedNetworkImageProvider(
-                                '${item.product.image}'),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 76,
+                          height: 76,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            image: DecorationImage(
+                              image: CachedNetworkImageProvider(productImage),
+                            ),
                           ),
                         ),
-                      ),
-                      const SpaceWidth(12),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item.product.name ?? '',
-                              style: TextStyle(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.w600,
+                        const SpaceWidth(12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.product.name ?? '',
+                                style: TextStyle(
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
-                            Text(
-                              item.product.category ?? '',
-                              style: TextStyle(
-                                  color: AppColors.grey, fontSize: 14.sp),
-                            ),
-                            const SpaceHeight(10),
-                            Row(
-                              children: [
-                                Text(
-                                  NumberFormat.currency(
-                                          locale: 'id_IDR',
-                                          symbol: 'Rp ',
-                                          decimalDigits: 0)
-                                      .format(item.product.price),
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
+                              Text(
+                                item.product.category ?? '',
+                                style: TextStyle(
+                                    color: AppColors.grey, fontSize: 14.sp),
+                              ),
+                              const SpaceHeight(10),
+                              Row(
+                                children: [
+                                  Text(
+                                    NumberFormat.currency(
+                                            locale: 'id_IDR',
+                                            symbol: 'Rp ',
+                                            decimalDigits: 0)
+                                        .format(item.product.price),
+                                    style: TextStyle(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                                const Spacer(),
-                                const SpaceWidth(10),
-                                Container(
-                                  width: 30.w,
-                                  height: 30.w,
-                                  alignment: Alignment.center,
-                                  child: IconButton.filled(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () {
-                                      context.read<CartBloc>().add(
-                                          CartEvent.decrementProduct(
-                                              item.product));
-                                    },
-                                    icon: const Icon(Icons.remove),
+                                  const Spacer(),
+                                  const SpaceWidth(10),
+                                  Container(
+                                    width: 30.w,
+                                    height: 30.w,
+                                    alignment: Alignment.center,
+                                    child: IconButton.filled(
+                                      padding: EdgeInsets.zero,
+                                      onPressed: () {
+                                        context.read<CartBloc>().add(
+                                            CartEvent.decrementProduct(
+                                                item.product));
+                                      },
+                                      icon: const Icon(Icons.remove),
+                                    ),
                                   ),
-                                ),
-                                const SpaceWidth(10),
-                                Text(
-                                  item.quantity.toString(),
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w600,
+                                  const SpaceWidth(10),
+                                  Text(
+                                    item.quantity.toString(),
+                                    style: TextStyle(
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                                const SpaceWidth(10),
-                                Container(
-                                  width: 30.w,
-                                  height: 30.w,
-                                  alignment: Alignment.center,
-                                  child: IconButton.filled(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () {
-                                      setState(() {
-                                        item.quantity++;
-                                      });
-                                    },
-                                    icon: const Icon(Icons.add),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+                                  const SpaceWidth(10),
+                                  Container(
+                                    width: 30.w,
+                                    height: 30.w,
+                                    alignment: Alignment.center,
+                                    child: IconButton.filled(
+                                      padding: EdgeInsets.zero,
+                                      onPressed: () {
+                                        context.read<CartBloc>().add(
+                                            CartEvent.incrementProduct(
+                                                item.product));
+                                      },
+                                      icon: const Icon(Icons.add),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
