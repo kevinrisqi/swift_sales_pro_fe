@@ -10,7 +10,11 @@ import 'package:swift_sales_pro_fe/services/core_environment_function.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  CoreEnvironmentFunction.currentFlavor = await FlavorEnvironmentService.call();
+  CoreEnvironmentFunction.currentFlavor = await FlavorEnvironmentService.call(
+    onDevelopment: (flavor) => flavor,
+    onStaging: (flavor) => flavor,
+    onProduction: (flavor) => flavor,
+  );
 
   //* Force orientation screen always portrait
   SystemChrome.setPreferredOrientations([
